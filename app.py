@@ -148,11 +148,11 @@ if option=="🏠 Home":
     st.write("Help rural entrepreneurs make better business decisions using location, available capital, demand, competition, profitability, financial planning and government schemes.")
     st.header("⭐ Key Features")
     c1,c2,c3=st.columns(3)
-    with c1: st.subheader("💡 Business Recommendation");st.write("Identify suitable businesses based on budget and available resources.")
+    with c1: st.subheader("💡 Business Recommendation");st.write("Evaluate business suitability based on budget, resources and market factors.")
     with c2: st.subheader("📍 Hyper-Local Analysis");st.write("Analyze local market, population, footfall and competitors.")
     with c3: st.subheader("📊 Market Analysis");st.write("Compare demand, competition, investment and expected profit.")
     c1,c2,c3=st.columns(3)
-    with c1: st.subheader("💰 Financial Planning");st.write("Calculate investment, loan requirement, profit, EMI and break-even.")
+    with c1: st.subheader("💰 Financial Planning");st.write("Calculate investment, loan requirement, profit, EMI and payback period.")
     with c2: st.subheader("🏦 Scheme Routing");st.write("Use government loan scheme information from the Finance team's dataset.")
     with c3: st.subheader("📄 Business Report");st.write("Combine business, market and financial information into one report.")
     st.header("⚙️ How It Works")
@@ -176,7 +176,7 @@ elif option=="💼 Business Recommendation":
         else:
             row=df[df["Business"]==interest].iloc[0];score=calculate_feasibility(interest,budget,land,water,experience);risk=get_risk(score)
             st.success("Business analysis completed!")
-            st.subheader("🎯 Recommended Business");st.success(interest);st.metric("⭐ Feasibility Score",f"{score}/100");st.progress(score/100)
+           st.subheader("🎯 Business Assessed");st.success(interest);st.metric("⭐ Feasibility Score",f"{score}/100");st.progress(score/100)
             c1,c2,c3,c4=st.columns(4)
             c1.metric("📈 Demand",f"{row['Demand Score']}/10");c2.metric("🏪 Competition",f"{row['Competition Score']}/10");c3.metric("💰 Starting Cost",f"₹{row['Starting Cost']:,.0f}");c4.metric("⚠️ Risk",risk)
             st.subheader("📌 Data from Excel")
@@ -239,7 +239,7 @@ elif option=="📊 Market Analysis":
 
 elif option=="💰 Financial Calculator":
     st.title("💰 Smart Financial Calculator")
-    st.write("Estimate project cost, financing requirement, monthly profit, EMI and break-even.")
+    st.write("Estimate project cost, financing requirement, monthly profit, EMI and payback period.")
     c1,c2=st.columns(2)
     with c1:
         project_cost=st.number_input("💰 Total Project Cost (₹)",min_value=0,step=5000)
@@ -249,18 +249,19 @@ elif option=="💰 Financial Calculator":
         monthly_expenses=st.number_input("💸 Monthly Expenses (₹)",min_value=0,step=1000)
         interest_rate=st.number_input("📊 Annual Interest Rate (%)",min_value=0.0,value=8.0,step=.5)
         repayment_years=st.number_input("📅 Repayment Period (Years)",min_value=1,max_value=20,value=5)
-    moratorium=st.number_input("⏳ Moratorium Period (Months)",min_value=0,max_value=24,value=6)
+   
     if st.button("🧮 Calculate Financial Plan"):
         if project_cost==0:st.warning("Please enter project cost.")
         elif own_capital>project_cost:st.warning("Own contribution cannot be greater than project cost.")
         else:
-            loan_required=project_cost-own_capital;monthly_profit=monthly_income-monthly_expenses;emi=calculate_emi(loan_required,interest_rate,repayment_years);break_even=own_capital/monthly_profit if monthly_profit>0 else 0
+            loan_required=project_cost-own_capital;monthly_profit=monthly_income-monthly_expenses;emi=calculate_emi(loan_required,interest_rate,repayment_years);payback_period = own_capital / monthly_profit if monthly_profit > 0 else 0
             st.success("Financial calculation completed!")
             c1,c2,c3,c4=st.columns(4)
             c1.metric("Project Cost",f"₹{project_cost:,.0f}");c2.metric("Own Contribution",f"₹{own_capital:,.0f}");c3.metric("Loan Required",f"₹{loan_required:,.0f}");c4.metric("Monthly Profit",f"₹{monthly_profit:,.0f}")
-            c1,c2,c3=st.columns(3)
-            c1.metric("Estimated EMI",f"₹{emi:,.0f}");c2.metric("Interest Rate",f"{interest_rate}%");c3.metric("Moratorium",f"{moratorium} months")
-            if monthly_profit>0:st.success(f"Estimated break-even on own contribution: {break_even:.1f} months")
+            c1,c2=st.columns(2)
+            c1.metric("Estimated EMI",f"₹{emi:,.0f}")
+            c2.metric("Interest Rate",f"{interest_rate}%")
+            if monthly_profit>0:st.success(f"Estimated payback period on own contribution: {payback_period:.1f} months")
             else:st.error("Monthly expenses are equal to or higher than income.")
             months=repayment_years*12;remaining=float(loan_required);schedule=[];monthly_rate=interest_rate/12/100
             for month in range(1,months+1):
@@ -330,6 +331,6 @@ else:
     st.write("Rural Business Advisor is a decision-support platform designed to help rural entrepreneurs evaluate business opportunities, understand local market conditions, plan finances and explore government financing options.")
     st.header("❓ Problem");st.write("Rural entrepreneurs may face difficulty understanding which business is suitable for their locality, how much investment is required and which financing options may be relevant.")
     st.header("💡 Solution");st.write("Our platform combines hyper-local business analysis, business recommendation, financial calculation and government scheme information in one platform.")
-    st.header("🛠️ Technologies");st.write("🐍 Python  |  🌐 Streamlit  |  🐼 Pandas  |  📊 Plotly  |  🤖 Machine Learning")
-    st.header("🚀 Future Development");st.write("• Machine-learning based business recommendation\n• Real competitor mapping\n• Multilingual and voice support\n• More accurate government scheme routing")
+    st.header("🛠️ Technologies");st.write("🐍 Python  |  🌐 Streamlit  |  🐼 Pandas  |  📊 Plotly ")
+    st.header("🚀 Future Development");st.write("• Machine-learning based business recommendation\n• Real competitor mapping\n• Multilingual and voice support\n• More accurate government scheme routing\n• Digital Market place Integration")
     st.success("🌾 Helping rural entrepreneurs make smarter business decisions.")
